@@ -1,0 +1,399 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="5/20/2021 12:14:11 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="ML-RefVm-765087"
+  DTS:CreatorName="ML-RefVm-765087\imt577user"
+  DTS:DTSID="{08F2B361-34E7-49FF-918B-04E3704463C8}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.157"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package_FactTable"
+  DTS:PackageType="5"
+  DTS:VersionBuild="7"
+  DTS:VersionGUID="{B24C0A77-D77A-4BF6-AD19-876DF95835F1}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Create Table factProductSalesTarget 1"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:DTSID="{ec07949f-d535-477c-a460-e84c3b36e74d}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create Table factProductSalesTarget 1"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{8ADE935E-0968-4169-9470-A1B32788E8C2}"
+          SQLTask:SqlStatementSource="-- factProductSalesTarget&#xA;&#xA;IF NOT EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'factProductSalesTarget')&#xA;BEGIN&#xA;&#x9;CREATE TABLE dbo.factProductSalesTarget&#xA;&#x9;(&#xA;&#x9;factSalesTargetID INT IDENTITY(1,1) CONSTRAINT PK_factProductSalesTarget PRIMARY KEY CLUSTERED NOT NULL, -- SurrogateKey&#xA;&#x9;dimProductID INT FOREIGN KEY REFERENCES dimProduct (dimProductID),&#xA;&#x9;dimTargetDateID INT FOREIGN KEY REFERENCES dimDate (dimDateID),&#xA;&#x9;factProductTargetSalesQuantity INT NOT NULL&#xA;&#x9;);&#xA;END&#xA;GO" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Create Table factSalesActual"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:DTSID="{a2367395-a646-44cb-b590-2c8acf7e096f}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create Table factSalesActual"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="2">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{8ADE935E-0968-4169-9470-A1B32788E8C2}"
+          SQLTask:SqlStatementSource="-- factSalesActual&#xA;&#xA;IF NOT EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'factSalesActual')&#xA;BEGIN&#xA;&#x9;CREATE TABLE dbo.factSalesActual&#xA;&#x9;(&#xA;&#x9;factSalesActualID INT IDENTITY(1,1) CONSTRAINT PK_factSalesActual PRIMARY KEY CLUSTERED NOT NULL, &#xA;&#x9;dimProductID INT FOREIGN KEY REFERENCES dimProduct (dimProductID),&#xA;&#x9;dimStoreID INT FOREIGN KEY REFERENCES dimStore (dimStoreID),&#xA;&#x9;dimResellerID INT FOREIGN KEY REFERENCES dimReseller (dimResellerID),&#xA;&#x9;dimCustomerID INT FOREIGN KEY REFERENCES dimCustomer (dimCustomerID),&#xA;&#x9;dimChannelID INT FOREIGN KEY REFERENCES dimChannel (dimChannelID),&#xA;&#x9;dimSaleDateID INT FOREIGN KEY REFERENCES dimDate (dimDateID), -- name of FK is different than the referenced dimDate&#xA;&#x9;dimLocationID INT FOREIGN KEY REFERENCES dimLocation (dimLocationID),&#xA;&#x9;factSourceSalesHeaderID INT NOT NUll, &#xA;&#x9;factSourceSalesDetailID INT NOT NUll, &#xA;&#x9;factSaleAmount DECIMAL(18,2) NOT NULL,&#xA;&#x9;factSaleQuantity INT NOT NULL, -- not sure of the data type&#xA;&#x9;factSaleUnitPrice DECIMAL(18,2) NOT NULL, -- not sure of the data type&#xA;&#x9;factSaleExtendedCost DECIMAL(18,2) NOT NULL, -- not sure of the data type&#xA;&#x9;factSaleTotalProfit DECIMAL(18,2) NOT NULL -- not sure of the data type&#xA;&#x9;);&#xA;END&#xA;GO" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Create Table factSRCSalesTarget"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:DTSID="{6a7b4a52-a3a4-4df6-a15b-e838ed0a3a5e}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create Table factSRCSalesTarget"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{8ADE935E-0968-4169-9470-A1B32788E8C2}"
+          SQLTask:SqlStatementSource="-- factSRCSalesTarget&#xA;&#xA;IF NOT EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'factSRCSalesTarget')&#xA;BEGIN&#xA;&#x9;CREATE TABLE dbo.factSRCSalesTarget&#xA;&#x9;(&#xA;&#x9;factSalesTargetID INT IDENTITY(1,1) CONSTRAINT PK_factSalesTarget PRIMARY KEY CLUSTERED NOT NULL, -- SurrogateKey&#xA;&#x9;dimStoreID INT FOREIGN KEY REFERENCES dimStore (dimStoreID),&#xA;&#x9;dimResellerID INT FOREIGN KEY REFERENCES dimReseller (dimResellerID),&#xA;&#x9;dimChannelID INT FOREIGN KEY REFERENCES dimChannel (dimChannelID),&#xA;&#x9;dimTargetDateID INT FOREIGN KEY REFERENCES dimDate (dimDateID), -- name of FK is different than the referenced dimDate&#xA;&#x9;factSalesTargetAmount DECIMAL(18,2) NOT NULL&#xA;&#x9;);&#xA;END&#xA;GO" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Delete Task factProductSalesTarget"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:DTSID="{3506B73C-BC7A-4A9E-AD70-0209D9400CB2}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Delete Task factProductSalesTarget"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{8ADE935E-0968-4169-9470-A1B32788E8C2}"
+          SQLTask:SqlStatementSource="IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'factProductSalesTarget')&#xA;BEGIN&#xA;&#x9;DELETE FROM dbo.factProductSalesTarget;&#xA;&#x9;DBCC CHECKIDENT ( factProductSalesTarget, RESEED, 0);&#xA;END&#xA;GO" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Delete Task factSalesActual"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:DTSID="{125da47d-131d-48d1-b1e3-7a0706682c1c}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Delete Task factSalesActual"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="2">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{8ADE935E-0968-4169-9470-A1B32788E8C2}"
+          SQLTask:SqlStatementSource="IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'factSalesActual')&#xA;BEGIN&#xA;&#x9;DELETE FROM dbo.factSalesActual;&#xA;&#x9;DBCC CHECKIDENT ( factSalesActual, RESEED, 0);&#xA;END&#xA;GO" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Delete Task factSRCSalesTarget"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:DTSID="{cf4953fe-7bd4-43e5-984e-719af1f7d6c7}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Delete Task factSRCSalesTarget"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{8ADE935E-0968-4169-9470-A1B32788E8C2}"
+          SQLTask:SqlStatementSource="IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'factSRCSalesTarget')&#xA;BEGIN&#xA;&#x9;DELETE FROM dbo.factSRCSalesTarget;&#xA;&#x9;DBCC CHECKIDENT ( factSRCSalesTarget, RESEED, 0);&#xA;END&#xA;GO" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Data factProductSalesTarget"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:DTSID="{412be117-4511-4151-91c2-2c3358da2bbe}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Data factProductSalesTarget"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{8ADE935E-0968-4169-9470-A1B32788E8C2}"
+          SQLTask:SqlStatementSource="-- factProductSalesTarget&#xA;&#xA;IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'factProductSalesTarget')&#xA;BEGIN&#xA;&#x9;-- ====================================&#xA;&#x9;-- Load factProductSalesTarget table&#xA;&#x9;-- ====================================&#xA;&#xA;&#x9;INSERT INTO dbo.factProductSalesTarget&#xA;&#x9;(&#xA;&#x9; dimProductID&#xA;&#x9;,dimTargetDateID&#xA;&#x9;,factProductTargetSalesQuantity&#xA;&#x9;)&#xA;&#x9;SELECT DISTINCT&#xA;&#x9; COALESCE(dbo.dimProduct.dimProductID,-1) AS dimProductID&#xA;&#x9;,dbo.DimDate.dimDateID AS dimTargetDateID&#xA;&#x9;,dbo.[StageProductSalesTarget].[ SalesQuantityTarget ] AS factProductTargetSalesQuantity&#xA;&#x9;FROM [StageProductSalesTarget]&#xA;&#x9;LEFT JOIN dimProduct&#xA;&#x9;&#x9;ON [StageProductSalesTarget].productID = dimProduct.dimSourceproductID&#xA;&#x9;LEFT JOIN dimDate&#xA;&#x9;&#x9;ON [StageProductSalesTarget].year = dimDate.CalendarYear order by 1;&#xA;END&#xA;GO " xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Data factSalesActual"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:DTSID="{4e3e37ca-9229-4071-bf9e-1d9650132373}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Data factSalesActual"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="2">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{8ADE935E-0968-4169-9470-A1B32788E8C2}"
+          SQLTask:SqlStatementSource="-- factSalesActual&#xA;&#xA;IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'factSalesActual')&#xA;BEGIN&#xA;&#x9;-- ====================================&#xA;&#x9;-- Load dimCustomer table&#xA;&#x9;-- ====================================&#xA;&#xA;&#x9;INSERT INTO dbo.factSalesActual&#xA;&#x9;(&#xA;&#x9;dimProductID&#xA;&#x9;,dimStoreID&#xA;&#x9;,dimResellerID&#xA;&#x9;,dimCustomerID&#xA;&#x9;,dimChannelID&#xA;&#x9;,dimSaleDateID&#xA;&#x9;,dimLocationID&#xA;&#x9;,factSourceSalesHeaderID&#xA;&#x9;,factSourceSalesDetailID&#xA;&#x9;,factSaleAmount&#xA;&#x9;,factSaleQuantity&#xA;&#x9;,factSaleUnitPrice&#xA;&#x9;,factSaleExtendedCost&#xA;&#x9;,factSaleTotalProfit&#xA;&#x9;)&#xA;&#x9;SELECT DISTINCT &#xA;&#x9; dbo.dimProduct.dimSourceProductID as dimProductID&#xA;&#x9;,COALESCE(dbo.dimStore.dimStoreID, -1) AS dimStoreID&#xA;&#x9;,COALESCE(dbo.dimReseller.dimResellerID, -1) AS dimResellerID&#xA;&#x9;,COALESCE(dbo.dimCustomer.dimCustomerID, -1) AS dimCustomerID&#xA;&#x9;,COALESCE(dbo.dimChannel.dimChannelID, -1) AS dimChannelID&#xA;&#x9;,COALESCE(dbo.DimDate.dimDateID,-1) AS dimSaleDateID&#xA;&#x9;,COALESCE(dbo.dimCustomer.dimLocationID, dbo.dimStore.dimLocationID, dbo.dimReseller.dimLocationID,-1) AS dimdimLocationID&#xA;&#x9;,dbo.StageSalesHeader.SalesHeaderID AS factSourceSalesHeaderID&#xA;&#x9;,dbo.StageSalesDetail.SalesDetailID AS factSourceSalesDetailID&#xA;&#x9;,dbo.StageSalesDetail.SalesAmount AS factSaleAmount&#xA;&#x9;,dbo.StageSalesDetail.SalesQuantity AS factSaleQuantity&#xA;&#x9;,CAST((SalesAmount/SalesQuantity) AS Decimal(18,2)) AS factSaleUnitPrice&#xA;&#x9;,(SalesQuantity*dimProductCost) AS factSaleExtendedCost --formula needed&#xA;&#x9;,(SalesAmount-(SalesQuantity*dimProductCost)) AS factSaleTotalProfit  --formula needed&#xA;&#xA;&#x9;FROM StageSalesHeader&#xA;&#x9;INNER JOIN StageSalesDetail&#xA;&#x9;&#x9;ON StageSalesHeader.SalesHeaderID = StageSalesDetail.SalesHeaderID&#xA;&#x9;INNER JOIN dimProduct&#xA;&#x9;&#x9;ON StageSalesDetail.ProductID = dimProduct.dimSourceProductID&#xA;&#x9;INNER JOIN dimChannel&#xA;&#x9;&#x9;ON StageSalesHeader.ChannelID = dimChannel.dimSourceChannelID&#xA;&#x9;LEFT JOIN DimDate&#xA;&#x9;&#x9;ON StageSalesHeader.Date = DimDate.FullDate&#xA;&#x9;LEFT JOIN dimCustomer&#xA;&#x9;&#x9;ON StageSalesHeader.CustomerID = dimCustomer.dimSourceCustomerID&#xA;&#x9;LEFT JOIN dimStore&#xA;&#x9;&#x9;ON StageSalesHeader.StoreID = dimStore.dimSourceStoreID&#xA;&#x9;LEFT JOIN dimReseller&#xA;&#x9;&#x9;ON StageSalesHeader.ResellerID = dimReseller.dimSourceResellerID;&#xA;&#xA;END&#xA;GO " xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Load Data factSRCSalesTarget"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:DTSID="{90ed5e30-d511-4449-b838-3d4421c04e0e}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Load Data factSRCSalesTarget"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{8ADE935E-0968-4169-9470-A1B32788E8C2}"
+          SQLTask:SqlStatementSource="-- factSRCSalesTarget&#xA;&#xA;IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'factSRCSalesTarget')&#xA;BEGIN&#xA;&#x9;-- ====================================&#xA;&#x9;-- Load dimCustomer table&#xA;&#x9;-- ====================================&#xA;&#xA;&#x9;INSERT INTO dbo.factSRCSalesTarget&#xA;&#x9;(&#xA;&#x9; dimStoreID&#xA;&#x9;,dimResellerID&#xA;&#x9;,dimChannelID&#xA;&#x9;,dimTargetDateID&#xA;&#x9;,factSalesTargetAmount&#xA;&#x9;)&#xA;&#x9;SELECT&#xA;&#x9;&#x9; COALESCE(dimStore.dimStoreID,-1) AS dimStoreID&#xA;&#x9;&#x9;,COALESCE(dimReseller.dimResellerID,-1) AS dimResellerID&#xA;&#x9;&#x9;,COALESCE(dimChannel.dimChannelID,-1) AS dimChannelID&#xA;&#x9;&#x9;,COALESCE(dimDate.dimDateID,-1) AS dimDateID&#xA;&#x9;&#x9;,[TargetSalesAmount]&#xA;&#x9;FROM dbo.[StageSrcSalesTarget]&#xA;&#x9;LEFt JOIN dimChannel&#xA;&#x9;&#x9;ON [StageSrcSalesTarget].ChannelName = dimChannel.dimChannelName&#xA;&#x9;LEFT JOIN dimStore&#xA;&#x9;&#x9;ON [StageSrcSalesTarget].TargetName = dimStore.dimStoreName&#xA;&#x9;LEFT JOIN dimReseller&#xA;&#x9;&#x9;ON [StageSrcSalesTarget].TargetName = dimReseller.dimResellerName&#xA;&#x9;LEFT JOIN dimdate &#xA;&#x9;&#x9;ON [StageSrcSalesTarget].Year = dimdate.CalendarYear;&#xA;END&#xA;GO" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{C207951B-5143-49FC-ABD0-6394597F2CC8}"
+      DTS:From="Package\Delete Task factProductSalesTarget"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Create Table factProductSalesTarget 1" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{85EDC9FE-46A3-457C-87AC-35DD91126D9B}"
+      DTS:From="Package\Create Table factProductSalesTarget 1"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Load Data factProductSalesTarget" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{1FB4AE32-1233-4A51-A27B-397152B62C45}"
+      DTS:From="Package\Delete Task factSalesActual"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\Create Table factSalesActual" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
+      DTS:CreationName=""
+      DTS:DTSID="{08BC2036-9886-4B91-8A92-9F6BC9747D47}"
+      DTS:From="Package\Create Table factSalesActual"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 3"
+      DTS:To="Package\Load Data factSalesActual" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4]"
+      DTS:CreationName=""
+      DTS:DTSID="{43C82625-A2CE-4CF8-90CB-218FED16A115}"
+      DTS:From="Package\Delete Task factSRCSalesTarget"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4"
+      DTS:To="Package\Create Table factSRCSalesTarget" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 5]"
+      DTS:CreationName=""
+      DTS:DTSID="{6F7C47FF-6C2E-42FE-BB47-3C37D414A508}"
+      DTS:From="Package\Create Table factSRCSalesTarget"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 5"
+      DTS:To="Package\Load Data factSRCSalesTarget" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="242,41.6"
+          Id="Package\Create Table factProductSalesTarget 1"
+          TopLeft="104.615388452654,145.21290255496" />
+        <NodeLayout
+          Size="221.2,41.6"
+          Id="Package\Create Table factSalesActual"
+          TopLeft="373.076936761304,145.025808909235" />
+        <NodeLayout
+          Size="242.4,41.6"
+          Id="Package\Create Table factSRCSalesTarget"
+          TopLeft="659.615408809934,138.735486425346" />
+        <NodeLayout
+          Size="242,41.6"
+          Id="Package\Delete Task factProductSalesTarget"
+          TopLeft="104.615388452654,43.6129025549596" />
+        <NodeLayout
+          Size="226.8,41.6"
+          Id="Package\Delete Task factSalesActual"
+          TopLeft="376.153859951088,43.9612943347608" />
+        <NodeLayout
+          Size="226.8,41.6"
+          Id="Package\Delete Task factSRCSalesTarget"
+          TopLeft="663.461562797164,42.283875005724" />
+        <NodeLayout
+          Size="241.2,41.6"
+          Id="Package\Load Data factProductSalesTarget"
+          TopLeft="104.615388452654,246.81290255496" />
+        <NodeLayout
+          Size="205.6,41.6"
+          Id="Package\Load Data factSalesActual"
+          TopLeft="373.84616755875,246.090323483708" />
+        <NodeLayout
+          Size="229.6,41.6"
+          Id="Package\Load Data factSRCSalesTarget"
+          TopLeft="658.461562613765,245.670968651449" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="225.615388452654,85.2129025549596">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="225.415388452654,186.81290255496">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="486.615398356196,85.5612943347608">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.4645145744742"
+              Start="0,0"
+              End="0,51.9645145744742">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,51.9645145744742" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3]"
+          TopLeft="480.161552160027,186.625808909235">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.464514574473"
+              Start="0,0"
+              End="0,51.964514574473">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,51.964514574473" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4]"
+          TopLeft="778.838485803549,83.883875005724">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,54.8516114196222"
+              Start="0,0"
+              End="0,47.3516114196222">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,47.3516114196222" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 5]"
+          TopLeft="777.038485711849,180.335486425346">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,65.3354822261029"
+              Start="0,0"
+              End="0,57.8354822261029">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,57.8354822261029" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
