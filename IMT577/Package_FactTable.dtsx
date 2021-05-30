@@ -11,8 +11,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package_FactTable"
   DTS:PackageType="5"
-  DTS:VersionBuild="9"
-  DTS:VersionGUID="{C82B228A-F63A-4357-AEA8-C8A40B355045}">
+  DTS:VersionBuild="10"
+  DTS:VersionGUID="{712ACD5E-3C8A-4047-8AFD-75A720AA0A58}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:Variables />
@@ -25,7 +25,7 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="Create Table factProductSalesTarget 1"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="0">
+      DTS:ThreadHint="1">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -41,7 +41,7 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="Create Table factSalesActual"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="1">
+      DTS:ThreadHint="2">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -57,7 +57,7 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="Create Table factSRCSalesTarget"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="2">
+      DTS:ThreadHint="0">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -73,7 +73,7 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="Delete Task factProductSalesTarget"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="0">
+      DTS:ThreadHint="1">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -89,7 +89,7 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="Delete Task factSalesActual"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="1">
+      DTS:ThreadHint="2">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -105,7 +105,7 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="Delete Task factSRCSalesTarget"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="2">
+      DTS:ThreadHint="0">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -121,12 +121,12 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="Load Data factProductSalesTarget"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="0">
+      DTS:ThreadHint="1">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
           SQLTask:Connection="{8ADE935E-0968-4169-9470-A1B32788E8C2}"
-          SQLTask:SqlStatementSource="-- factProductSalesTarget&#xA;&#xA;IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'factProductSalesTarget')&#xA;BEGIN&#xA;&#x9;-- ====================================&#xA;&#x9;-- Load factProductSalesTarget table&#xA;&#x9;-- ====================================&#xA;&#xA;&#x9;INSERT INTO dbo.factProductSalesTarget&#xA;&#x9;(&#xA;&#x9; dimProductID&#xA;&#x9;,dimTargetDateID&#xA;&#x9;,factProductTargetSalesQuantity&#xA;&#x9;)&#xA;&#x9;SELECT DISTINCT&#xA;&#x9; COALESCE(dbo.dimProduct.dimProductID,-1) AS dimProductID&#xA;&#x9;,dbo.DimDate.dimDateID AS dimTargetDateID&#xA;&#x9;,dbo.[StageProductSalesTarget].[ SalesQuantityTarget ] AS factProductTargetSalesQuantity&#xA;&#x9;FROM [StageProductSalesTarget]&#xA;&#x9;LEFT JOIN dimProduct&#xA;&#x9;&#x9;ON [StageProductSalesTarget].productID = dimProduct.dimSourceproductID&#xA;&#x9;LEFT JOIN dimDate&#xA;&#x9;&#x9;ON [StageProductSalesTarget].year = dimDate.CalendarYear order by 1;&#xA;END&#xA;GO " xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          SQLTask:SqlStatementSource="-- factProductSalesTarget&#xA;&#xA;IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'factProductSalesTarget')&#xA;BEGIN&#xA;&#x9;-- ====================================&#xA;&#x9;-- Load factProductSalesTarget table&#xA;&#x9;-- ====================================&#xA;&#xA;&#x9;INSERT INTO dbo.factProductSalesTarget&#xA;&#x9;(&#xA;&#x9; dimProductID&#xA;&#x9;,dimTargetDateID&#xA;&#x9;,factProductTargetSalesQuantity&#xA;&#x9;)&#xA;&#x9;SELECT DISTINCT&#xA;&#x9; COALESCE(dbo.dimProduct.dimProductID,-1) AS dimProductID&#xA;&#x9;,dbo.DimDate.dimDateID AS dimTargetDateID&#xA;&#x9;,dbo.[StageProductSalesTarget].[ SalesQuantityTarget ]/365 AS factProductTargetSalesQuantity&#xA;&#x9;FROM [StageProductSalesTarget]&#xA;&#x9;LEFT JOIN dimProduct&#xA;&#x9;&#x9;ON [StageProductSalesTarget].productID = dimProduct.dimSourceproductID&#xA;&#x9;LEFT JOIN dimDate&#xA;&#x9;&#x9;ON [StageProductSalesTarget].year = dimDate.CalendarYear order by 1;&#xA;END&#xA;GO " xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
@@ -137,7 +137,7 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="Load Data factSalesActual"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="1">
+      DTS:ThreadHint="2">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -153,12 +153,12 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="Load Data factSRCSalesTarget"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="2">
+      DTS:ThreadHint="0">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
           SQLTask:Connection="{8ADE935E-0968-4169-9470-A1B32788E8C2}"
-          SQLTask:SqlStatementSource="-- factSRCSalesTarget&#xA;&#xA;IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'factSRCSalesTarget')&#xA;BEGIN&#xA;&#x9;-- ====================================&#xA;&#x9;-- Load dimCustomer table&#xA;&#x9;-- ====================================&#xA;&#xA;&#x9;INSERT INTO dbo.factSRCSalesTarget&#xA;&#x9;(&#xA;&#x9; dimStoreID&#xA;&#x9;,dimResellerID&#xA;&#x9;,dimChannelID&#xA;&#x9;,dimTargetDateID&#xA;&#x9;,factSalesTargetAmount&#xA;&#x9;)&#xA;&#x9;SELECT&#xA;&#x9;&#x9; COALESCE(dimStore.dimStoreID,-1) AS dimStoreID&#xA;&#x9;&#x9;,COALESCE(dimReseller.dimResellerID,-1) AS dimResellerID&#xA;&#x9;&#x9;,COALESCE(dimChannel.dimChannelID,-1) AS dimChannelID&#xA;&#x9;&#x9;,COALESCE(dimDate.dimDateID,-1) AS dimDateID&#xA;&#x9;&#x9;,[TargetSalesAmount]&#xA;&#x9;FROM dbo.[StageSrcSalesTarget]&#xA;&#x9;LEFt JOIN dimChannel&#xA;&#x9;&#x9;ON [StageSrcSalesTarget].ChannelName = dimChannel.dimChannelName&#xA;&#x9;LEFT JOIN dimStore&#xA;&#x9;&#x9;ON [StageSrcSalesTarget].TargetName = dimStore.dimStoreName&#xA;&#x9;LEFT JOIN dimReseller&#xA;&#x9;&#x9;ON [StageSrcSalesTarget].TargetName = dimReseller.dimResellerName&#xA;&#x9;LEFT JOIN dimdate &#xA;&#x9;&#x9;ON [StageSrcSalesTarget].Year = dimdate.CalendarYear;&#xA;END&#xA;GO" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          SQLTask:SqlStatementSource="-- factSRCSalesTarget&#xA;&#xA;IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'factSRCSalesTarget')&#xA;BEGIN&#xA;&#x9;-- ====================================&#xA;&#x9;-- Load dimCustomer table&#xA;&#x9;-- ====================================&#xA;&#xA;&#x9;INSERT INTO dbo.factSRCSalesTarget&#xA;&#x9;(&#xA;&#x9; dimStoreID&#xA;&#x9;,dimResellerID&#xA;&#x9;,dimChannelID&#xA;&#x9;,dimTargetDateID&#xA;&#x9;,factSalesTargetAmount&#xA;&#x9;)&#xA;&#x9;SELECT&#xA;&#x9;&#x9; COALESCE(dimStore.dimStoreID,-1) AS dimStoreID&#xA;&#x9;&#x9;,COALESCE(dimReseller.dimResellerID,-1) AS dimResellerID&#xA;&#x9;&#x9;,COALESCE(dimChannel.dimChannelID,-1) AS dimChannelID&#xA;&#x9;&#x9;,COALESCE(dimDate.dimDateID,-1) AS dimDateID&#xA;&#x9;&#x9;,cast([TargetSalesAmount]/365 as decimal(18,2)) as [TargetSalesAmount]&#xA;&#x9;FROM dbo.[StageSrcSalesTarget]&#xA;&#x9;LEFt JOIN dimChannel&#xA;&#x9;&#x9;ON [StageSrcSalesTarget].ChannelName = dimChannel.dimChannelName&#xA;&#x9;LEFT JOIN dimStore&#xA;&#x9;&#x9;ON [StageSrcSalesTarget].TargetName = dimStore.dimStoreName&#xA;&#x9;LEFT JOIN dimReseller&#xA;&#x9;&#x9;ON [StageSrcSalesTarget].TargetName = dimReseller.dimResellerName&#xA;&#x9;LEFT JOIN dimdate &#xA;&#x9;&#x9;ON [StageSrcSalesTarget].Year = dimdate.CalendarYear;&#xA;END&#xA;GO" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
   </DTS:Executables>
